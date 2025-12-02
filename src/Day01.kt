@@ -34,30 +34,28 @@ data class Dial(var value: Int = 50, var counter: Int = 0) {
     fun rotate(command: Command) {
         require(command.value != 0)
         value = when (command) {
-            is Left -> (value - command.value) % 100
-            is Right -> (value + command.value) % 100
+            is Left -> (value - command.value).mod(100)
+            is Right -> (value + command.value).mod(100)
         }
-        if (value < 0) value += 100
         if (value == 0) counter++
     }
 
     fun rotate2(command: Command) {
         require(command.value != 0)
         val fullRotations = command.value / 100
-        val remaining = command.value % 100
+        val remaining = command.value.rem(100)
         counter += fullRotations
         value = when (command) {
             is Left -> {
                 if (value != 0 && value - remaining <= 0) counter++
-                (value - remaining) % 100
+                (value - remaining).mod(100)
             }
 
             is Right -> {
                 if (value + remaining > 99) counter++
-                (value + remaining) % 100
+                (value + remaining).mod(100)
             }
         }
-        if (value < 0) value += 100
     }
 }
 
