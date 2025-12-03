@@ -16,13 +16,11 @@ fun main() {
         return ranges.map { it.filter { it.invalidId2() } }.flatten().sumOf { it }
     }
 
-    // Or read a large test input from the `src/Day01_test.txt` file:
     val testInput = readInput("Day02_test")
     part1(testInput).println()
     check(part1(testInput) == 1227775554L)
     check(part2(testInput) == 4174379265L)
 
-    // Read the input from the `src/Day01.txt` file.
     val input = readInput("Day02")
     part1(input).println()
     part2(input).println()
