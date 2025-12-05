@@ -39,10 +39,7 @@ fun <T> Grid<T>.adjacentCells(cell: Cell<T>): List<Cell<T>> {
         cell.x + 1 to cell.y - 1,
         cell.x + 1 to cell.y,
         cell.x + 1 to cell.y + 1
-    ).mapNotNull { runCatching { this[it.second][it.first] }.getOrNull() }
+    ).mapNotNull { (x, y) -> runCatching { this[y][x] }.getOrNull() }
 }
 
 fun <T> Grid<T>.cells() = this.flatMap { it.toList() }
-
-inline fun <T> Grid<T>.forEachCell(action: (Cell<T>) -> Unit) =
-    cells().forEach { cell -> action(cell) }
