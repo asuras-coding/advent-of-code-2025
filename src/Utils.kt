@@ -25,6 +25,11 @@ typealias Grid<T> = Array<Array<Cell<T>>>
 fun <T> List<String>.toGrid(convert: (Char) -> T): Grid<T> =
     mapIndexed { y, row -> row.toCharArray().mapIndexed { x, value -> Cell(convert(value), x, y) }.toTypedArray() }.toTypedArray()
 
+fun List<String>.toGrid(): Grid<String> =
+    mapIndexed { y, row ->
+        row.trim().split("""\s+""".toRegex()).mapIndexed { x, value -> Cell(value, x, y) }.toTypedArray()
+    }.toTypedArray()
+
 data class Cell<T>(var value: T, val x: Int, val y: Int)
 
 fun <T> Grid<T>.print() = forEach { println(it.joinToString { c -> c.value.toString() }) }
@@ -43,3 +48,15 @@ fun <T> Grid<T>.adjacentCells(cell: Cell<T>): List<Cell<T>> {
 }
 
 fun <T> Grid<T>.cells() = this.flatMap { it.toList() }
+
+fun <T> Grid<T>.transpose(def: T): Grid<T> = Array(this.maxOf { it.size }) { y ->
+    Array(this.size) { x ->
+        runCatching { this[x][y].copy(x = y, y = x) }.getOrDefault(
+            Cell(
+                def,
+                x = y,
+                y = x
+            )
+        )
+    }
+}
